@@ -1,4 +1,4 @@
-module 	github.com/MuseTechnology/go-nostr
+module github.com/MuseTechnology/go-nostr
 
 go 1.21
 
