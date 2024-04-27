@@ -3,8 +3,8 @@ package relay
 import (
 	"fmt"
 
-	"github.com/nbd-wtf/go-nostr"
-	"github.com/nbd-wtf/go-nostr/nip29"
+	"github.com/MuseTechnology/go-nostr"
+	"github.com/MuseTechnology/go-nostr/nip29"
 )
 
 type Action interface {

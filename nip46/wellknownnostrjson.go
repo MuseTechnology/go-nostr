@@ -4,7 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nbd-wtf/go-nostr/nip05"
+	"github.com/MuseTechnology/go-nostr/nip05"
+	
 )
 
 func queryWellKnownNostrJson(ctx context.Context, fullname string) (pubkey string, relays []string, err error) {

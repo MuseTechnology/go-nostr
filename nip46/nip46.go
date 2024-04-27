@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/nbd-wtf/go-nostr"
-	"github.com/nbd-wtf/go-nostr/nip04"
+	"github.com/MuseTechnology/go-nostr"
+	"github.com/MuseTechnology/go-nostr/nip04"
+
 )
 
 var BUNKER_REGEX = regexp.MustCompile(`^bunker:\/\/([0-9a-f]{64})\??([?\/\w:.=&%]*)$`)

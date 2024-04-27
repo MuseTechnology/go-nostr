@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/nbd-wtf/go-nostr"
+	"github.com/MuseTechnology/go-nostr"
 )
 
 func TestBinaryPartialGet(t *testing.T) {

@@ -5,7 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nbd-wtf/go-nostr"
+	"github.com/MuseTechnology/go-nostr"
+
 )
 
 // CreateUnsignedAuthEvent creates an event which should be sent via an "AUTH" command.

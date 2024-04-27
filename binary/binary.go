@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/nbd-wtf/go-nostr"
+	"github.com/MuseTechnology/go-nostr"
 )
 
 func UnmarshalBinary(data []byte, evt *Event) (err error) {

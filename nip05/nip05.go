@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/nbd-wtf/go-nostr"
+	"github.com/MuseTechnology/go-nostr"
 )
 
 var NIP05_REGEX = regexp.MustCompile(`^(?:([\w.+-]+)@)?([\w_-]+(\.[\w_-]+)+)$`)

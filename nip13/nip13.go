@@ -9,7 +9,8 @@ import (
 	"strconv"
 	"time"
 
-	nostr "github.com/nbd-wtf/go-nostr"
+	nostr 	"github.com/MuseTechnology/go-nostr"
+
 )
 
 var (

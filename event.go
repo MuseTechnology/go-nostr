@@ -35,6 +35,7 @@ const (
 	KindSimpleGroupChatMessage      int = 9
 	KindSimpleGroupThread           int = 11
 	KindSimpleGroupReply            int = 12
+	KindShortFormVideo            	int = 15
 	KindChannelCreation             int = 40
 	KindChannelMetadata             int = 41
 	KindChannelMessage              int = 42

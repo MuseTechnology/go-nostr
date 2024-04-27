@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/nbd-wtf/go-nostr"
+	"github.com/MuseTechnology/go-nostr"
 )
 
 func Unmarshal(data []byte, evt *nostr.Event) (err error) {

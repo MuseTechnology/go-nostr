@@ -3,7 +3,7 @@ package binary
 import (
 	"encoding/hex"
 
-	"github.com/nbd-wtf/go-nostr"
+	"github.com/MuseTechnology/go-nostr"
 )
 
 type Event struct {

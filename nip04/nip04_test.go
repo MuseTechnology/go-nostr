@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nbd-wtf/go-nostr"
+	"github.com/MuseTechnology/go-nostr"
 )
 
 func TestEncryptionAndDecryption(t *testing.T) {

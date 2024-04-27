@@ -4,7 +4,8 @@ import (
 	"strings"
 
 	"github.com/bluekeyes/go-gitdiff/gitdiff"
-	"github.com/nbd-wtf/go-nostr"
+	"github.com/MuseTechnology/go-nostr"
+
 )
 
 type Patch struct {

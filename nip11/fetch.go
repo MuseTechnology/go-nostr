@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/nbd-wtf/go-nostr"
+	"github.com/MuseTechnology/go-nostr"
 )
 
 // Fetch fetches the NIP-11 RelayInformationDocument.

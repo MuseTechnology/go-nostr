@@ -4,9 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nbd-wtf/go-nostr"
-	"github.com/nbd-wtf/go-nostr/nip04"
-	"github.com/nbd-wtf/go-nostr/nip05"
+	"github.com/MuseTechnology/go-nostr"
+	"github.com/MuseTechnology/go-nostr/nip04"
+	"github.com/MuseTechnology/go-nostr/nip05"
+
 )
 
 func CheckNameAvailability(ctx context.Context, name, domain string) bool {

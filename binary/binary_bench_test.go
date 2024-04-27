@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/mailru/easyjson"
-	"github.com/nbd-wtf/go-nostr"
+	"github.com/MuseTechnology/go-nostr"
 )
 
 func BenchmarkBinaryEncoding(b *testing.B) {

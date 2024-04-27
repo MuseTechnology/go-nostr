@@ -3,7 +3,7 @@ package nip29
 import (
 	"fmt"
 
-	"github.com/nbd-wtf/go-nostr"
+	"github.com/MuseTechnology/go-nostr"
 )
 
 type Group struct {
