@@ -18,7 +18,7 @@ import (
 )
 
 type Connection struct {
-	conn              net.Conn
+	Conn              net.Conn
 	enableCompression bool
 	controlHandler    wsutil.FrameHandlerFunc
 	flateReader       *wsflate.Reader
