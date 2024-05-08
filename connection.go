@@ -18,7 +18,7 @@ import (
 )
 
 type Connection struct {
-	Conn              net.Conn
+	conn              net.Conn
 	enableCompression bool
 	controlHandler    wsutil.FrameHandlerFunc
 	flateReader       *wsflate.Reader
@@ -27,6 +27,10 @@ type Connection struct {
 	writer            *wsutil.Writer
 	msgStateR         *wsflate.MessageState
 	msgStateW         *wsflate.MessageState
+}
+
+func (c *Connection) NetConn() net.Conn {
+    return c.conn
 }
 
 func NewConnection(ctx context.Context, url string, requestHeader http.Header, tlsConfig *tls.Config) (*Connection, error) {
