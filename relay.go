@@ -42,6 +42,7 @@ type Relay struct {
 	// custom things that aren't often used
 	//
 	AssumeValid bool // this will skip verifying signatures for events received from this relay
+	DontFilter bool // this will skip verifying if the event received matches the filters set in the subscription
 }
 
 type writeRequest struct {
@@ -230,10 +231,11 @@ func (r *Relay) ConnectWithTLS(ctx context.Context, tlsConfig *tls.Config) error
 					continue
 				} else {
 					// check if the event matches the desired filter, ignore otherwise
-					if !subscription.Filters.Match(&env.Event) {
-						InfoLogger.Printf("{%s} filter does not match: %v ~ %v\n", r.URL, subscription.Filters, env.Event)
-						continue
-					}
+					if r.DontFilter || subscription.Filters.Match(&env.Event) {
+                        InfoLogger.Printf("{%s} filter does not match: %v ~ %v\n", r.URL, subscription.Filters, env.Event)
+                        continue
+                    }
+
 
 					// check signature, ignore invalid, except from trusted (AssumeValid) relays
 					if !r.AssumeValid {
