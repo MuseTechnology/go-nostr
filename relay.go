@@ -96,10 +96,13 @@ type RelayOption interface {
 // WithNoticeHandler just takes notices and is expected to do something with them.
 // when not given, defaults to logging the notices.
 type WithNoticeHandler func(notice string)
+type WithDontFilter bool
 
 func (_ WithNoticeHandler) IsRelayOption() {}
+func (_ WithDontFilter) IsRelayOption() {}
 
 var _ RelayOption = (WithNoticeHandler)(nil)
+var _ RelayOption = (WithDontFilter)(false)
 
 // String just returns the relay URL.
 func (r *Relay) String() string {
@@ -231,11 +234,13 @@ func (r *Relay) ConnectWithTLS(ctx context.Context, tlsConfig *tls.Config) error
 					continue
 				} else {
 					// check if the event matches the desired filter, ignore otherwise
-					if r.DontFilter || subscription.Filters.Match(&env.Event) {
-                        InfoLogger.Printf("{%s} filter does not match: %v ~ %v\n", r.URL, subscription.Filters, env.Event)
-                        continue
-                    }
 
+					if !r.DontFilter {
+						if !subscription.Filters.Match(&env.Event) {
+							InfoLogger.Printf("{%s} filter does not match: %v ~ %v\n", r.URL, subscription.Filters, env.Event)
+							continue
+						}
+					}
 
 					// check signature, ignore invalid, except from trusted (AssumeValid) relays
 					if !r.AssumeValid {
