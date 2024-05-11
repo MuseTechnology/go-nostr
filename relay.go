@@ -85,7 +85,6 @@ func NewRelay(ctx context.Context, url string, opts ...RelayOption) *Relay {
 // To close the connection, call r.Close().
 func RelayConnect(ctx context.Context, url string, opts ...RelayOption) (*Relay, error) {
 	r := NewRelay(context.Background(), url, opts...)
-	log.Printf("DontFilter setting: %v", r.DontFilter)
 	err := r.Connect(ctx)
 	return r, err
 }
