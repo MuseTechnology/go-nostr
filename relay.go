@@ -52,30 +52,32 @@ type writeRequest struct {
 
 // NewRelay returns a new relay. The relay connection will be closed when the context is canceled.
 func NewRelay(ctx context.Context, url string, opts ...RelayOption) *Relay {
-	ctx, cancel := context.WithCancel(ctx)
-	r := &Relay{
-		URL:                           NormalizeURL(url),
-		connectionContext:             ctx,
-		connectionContextCancel:       cancel,
-		Subscriptions:                 xsync.NewMapOf[string, *Subscription](),
-		okCallbacks:                   xsync.NewMapOf[string, func(bool, string)](),
-		writeQueue:                    make(chan writeRequest),
-		subscriptionChannelCloseQueue: make(chan *Subscription),
-	}
+    ctx, cancel := context.WithCancel(ctx)
+    r := &Relay{
+        URL:                           NormalizeURL(url),
+        connectionContext:             ctx,
+        connectionContextCancel:       cancel,
+        Subscriptions:                 xsync.NewMapOf[string, *Subscription](),
+        okCallbacks:                   xsync.NewMapOf[string, func(bool, string)](),
+        writeQueue:                    make(chan writeRequest),
+        subscriptionChannelCloseQueue: make(chan *Subscription),
+    }
 
-	for _, opt := range opts {
-		switch o := opt.(type) {
-		case WithNoticeHandler:
-			r.notices = make(chan string)
-			go func() {
-				for notice := range r.notices {
-					o(notice)
-				}
-			}()
-		}
-	}
+    for _, opt := range opts {
+        switch o := opt.(type) {
+        case WithNoticeHandler:
+            r.notices = make(chan string)
+            go func() {
+                for notice := range r.notices {
+                    o(notice)
+                }
+            }()
+        case WithDontFilter:
+            r.DontFilter = bool(o) 
+        }
+    }
 
-	return r
+    return r
 }
 
 // RelayConnect returns a relay object connected to url.
@@ -83,6 +85,7 @@ func NewRelay(ctx context.Context, url string, opts ...RelayOption) *Relay {
 // To close the connection, call r.Close().
 func RelayConnect(ctx context.Context, url string, opts ...RelayOption) (*Relay, error) {
 	r := NewRelay(context.Background(), url, opts...)
+	log.Printf("DontFilter setting: %v", r.DontFilter)
 	err := r.Connect(ctx)
 	return r, err
 }
