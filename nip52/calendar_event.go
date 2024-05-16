@@ -26,6 +26,8 @@ type CalendarEvent struct {
 	Participants []Participant
 	References   []string
 	Hashtags     []string
+	StartTzid    string
+	EndTzid      string
 }
 
 type Participant struct {
@@ -92,6 +94,10 @@ func ParseCalendarEvent(event nostr.Event) CalendarEvent {
 			calev.References = append(calev.References, tag[1])
 		case "t":
 			calev.Hashtags = append(calev.Hashtags, tag[1])
+		case "start_tzid":
+			calev.StartTzid = tag[1]
+		case "end_tzid":
+			calev.EndTzid = tag[1]
 		}
 	}
 	return calev

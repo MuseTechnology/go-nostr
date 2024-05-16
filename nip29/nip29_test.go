@@ -12,17 +12,17 @@ const (
 )
 
 func TestGroupEventBackAndForth(t *testing.T) {
-	group1 := NewGroup("xyz")
+	group1, _ := NewGroup("xyz'relay.com")
 	group1.Name = "banana"
 	group1.Private = true
 	meta1 := group1.ToMetadataEvent()
 	if meta1.Tags.GetD() != "xyz" ||
 		meta1.Tags.GetFirst([]string{"name", "banana"}) == nil ||
 		meta1.Tags.GetFirst([]string{"private"}) == nil {
-		t.Fatalf("translation of group1 to meta1data event failed")
+		t.Fatalf("translation of group1 to metadata event failed: %s", meta1)
 	}
 
-	group2 := NewGroup("abc")
+	group2, _ := NewGroup("abc'groups.com")
 	group2.Members[ALICE] = &Role{Name: "nada", Permissions: map[Permission]struct{}{PermAddUser: {}}}
 	group2.Members[BOB] = &Role{Name: "nada", Permissions: map[Permission]struct{}{PermEditMetadata: {}}}
 	group2.Members[CAROL] = EmptyRole
@@ -55,7 +55,7 @@ func TestGroupEventBackAndForth(t *testing.T) {
 	}
 
 	group2.MergeInMetadataEvent(meta1)
-	if group2.Name != "banana" || group2.ID != "abc" {
+	if group2.Name != "banana" || group2.Address.ID != "abc" {
 		t.Fatalf("merge of meta1 into group2 failed")
 	}
 }

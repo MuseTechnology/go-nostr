@@ -4,12 +4,20 @@ import (
 	"encoding/json"
 	"fmt"
 	"slices"
+	"strings"
 	"sync"
 
 	"github.com/mailru/easyjson"
+<<<<<<< HEAD
 	"github.com/MuseTechnology/go-nostr"
 	"github.com/MuseTechnology/go-nostr/nip04"
+	"github.com/MuseTechnology/go-nostr/nip44"
 
+=======
+	"github.com/nbd-wtf/go-nostr"
+	"github.com/nbd-wtf/go-nostr/nip04"
+	"github.com/nbd-wtf/go-nostr/nip44"
+>>>>>>> upstream/master
 )
 
 var _ Signer = (*StaticKeySigner)(nil)
@@ -23,7 +31,7 @@ type StaticKeySigner struct {
 	sync.Mutex
 
 	RelaysToAdvertise map[string]RelayReadWrite
-	AuthorizeRequest  func(harmless bool, from string) bool
+	AuthorizeRequest  func(harmless bool, from string, secret string) bool
 }
 
 func NewStaticKeySigner(secretKey string) StaticKeySigner {
@@ -91,12 +99,16 @@ func (p *StaticKeySigner) HandleRequest(event *nostr.Event) (
 		return req, resp, eventResponse, fmt.Errorf("error parsing request: %w", err)
 	}
 
+	var secret string
 	var harmless bool
 	var result string
 	var resultErr error
 
 	switch req.Method {
 	case "connect":
+		if len(req.Params) >= 2 {
+			secret = req.Params[1]
+		}
 		result = "ack"
 		harmless = true
 	case "get_public_key":
@@ -130,7 +142,7 @@ func (p *StaticKeySigner) HandleRequest(event *nostr.Event) (
 		jrelays, _ := json.Marshal(p.RelaysToAdvertise)
 		result = string(jrelays)
 		harmless = true
-	case "nip04_encrypt":
+	case "nip04_encrypt", "nip44_encrypt":
 		if len(req.Params) != 2 {
 			resultErr = fmt.Errorf("wrong number of arguments to 'nip04_encrypt'")
 			break
@@ -141,18 +153,26 @@ func (p *StaticKeySigner) HandleRequest(event *nostr.Event) (
 			break
 		}
 		plaintext := req.Params[1]
-		sharedSecret, err := nip04.ComputeSharedSecret(thirdPartyPubkey, p.secretKey)
+
+		getKey := nip04.ComputeSharedSecret
+		encrypt := nip04.Encrypt
+		if strings.HasPrefix(req.Method, "nip44") {
+			getKey = nip44.GenerateConversationKey
+			encrypt = func(message string, key []byte) (string, error) { return nip44.Encrypt(message, key) }
+		}
+
+		sharedSecret, err := getKey(thirdPartyPubkey, p.secretKey)
 		if err != nil {
 			resultErr = fmt.Errorf("failed to compute shared secret: %w", err)
 			break
 		}
-		ciphertext, err := nip04.Encrypt(plaintext, sharedSecret)
+		ciphertext, err := encrypt(plaintext, sharedSecret)
 		if err != nil {
 			resultErr = fmt.Errorf("failed to encrypt: %w", err)
 			break
 		}
 		result = ciphertext
-	case "nip04_decrypt":
+	case "nip04_decrypt", "nip44_decrypt":
 		if len(req.Params) != 2 {
 			resultErr = fmt.Errorf("wrong number of arguments to 'nip04_decrypt'")
 			break
@@ -163,12 +183,20 @@ func (p *StaticKeySigner) HandleRequest(event *nostr.Event) (
 			break
 		}
 		ciphertext := req.Params[1]
-		sharedSecret, err := nip04.ComputeSharedSecret(thirdPartyPubkey, p.secretKey)
+
+		getKey := nip04.ComputeSharedSecret
+		decrypt := nip04.Decrypt
+		if strings.HasPrefix(req.Method, "nip44") {
+			getKey = nip44.GenerateConversationKey
+			decrypt = nip44.Decrypt
+		}
+
+		sharedSecret, err := getKey(thirdPartyPubkey, p.secretKey)
 		if err != nil {
 			resultErr = fmt.Errorf("failed to compute shared secret: %w", err)
 			break
 		}
-		plaintext, err := nip04.Decrypt(ciphertext, sharedSecret)
+		plaintext, err := decrypt(ciphertext, sharedSecret)
 		if err != nil {
 			resultErr = fmt.Errorf("failed to encrypt: %w", err)
 			break
@@ -180,7 +208,7 @@ func (p *StaticKeySigner) HandleRequest(event *nostr.Event) (
 	}
 
 	if resultErr == nil && p.AuthorizeRequest != nil {
-		if !p.AuthorizeRequest(harmless, event.PubKey) {
+		if !p.AuthorizeRequest(harmless, event.PubKey, secret) {
 			resultErr = fmt.Errorf("unauthorized")
 		}
 	}
