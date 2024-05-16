@@ -8,17 +8,10 @@ import (
 	"sync"
 
 	"github.com/mailru/easyjson"
-<<<<<<< HEAD
 	"github.com/MuseTechnology/go-nostr"
 	"github.com/MuseTechnology/go-nostr/nip04"
 	"github.com/MuseTechnology/go-nostr/nip44"
 
-=======
-	"github.com/nbd-wtf/go-nostr"
-	"github.com/nbd-wtf/go-nostr/nip04"
-	"github.com/nbd-wtf/go-nostr/nip44"
->>>>>>> upstream/master
-)
 
 var _ Signer = (*StaticKeySigner)(nil)
 
