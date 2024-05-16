@@ -6,7 +6,7 @@ import (
 	"hash"
 	"testing"
 
-	"github.com/nbd-wtf/go-nostr"
+	"github.com/MuseTechnology/go-nostr"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -12,7 +12,7 @@ import (
 	"io"
 	"math"
 
-	"github.com/nbd-wtf/go-nostr/nip04"
+	"github.com/MuseTechnology/go-nostr/nip04"
 	"golang.org/x/crypto/chacha20"
 	"golang.org/x/crypto/hkdf"
 )
